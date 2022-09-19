@@ -95,7 +95,7 @@ server <- function(input, output, session) {
   })
   
   vals <- eventReactive(input$reset, {
-    c(input$size,input$fill)
+    c(input$size,input$fill,input$time)
   })
   
   output$canvas <- renderUI({
@@ -114,6 +114,7 @@ server <- function(input, output, session) {
     }
     else if (halt$state == 2) {
       size <- vals()[1]
+      t <- vals()[3]
       arr1 <- gameArr$data
       arr2 <- array(data = 0, dim = c(size+(bound*2),size+(bound*2)))
       heat <- array(data = 0, dim = c(size+(bound*2),size+(bound*2)))
@@ -135,7 +136,7 @@ server <- function(input, output, session) {
         olda2 <- arr2
         heat <- heat + arr2
         session$sendCustomMessage("updateGame", 0)
-        Sys.sleep(input$time)
+        Sys.sleep(t)
         
         for (i in 2:(size+(2*bound)-1)) {
           for (j in 2:(size+(2*bound)-1)) {
@@ -148,7 +149,7 @@ server <- function(input, output, session) {
         olda1 <- arr1
         heat <- heat + arr1
         session$sendCustomMessage("updateGame", 0)
-        Sys.sleep(input$time)
+        Sys.sleep(t)
       }
       
       
